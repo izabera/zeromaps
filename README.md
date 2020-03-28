@@ -42,12 +42,38 @@ Requirements
 ------------
 
 - a c compiler
-- python2 + fuse
+- python3 + fuse
 - x64
 - a modern Linux with no vsyscall page (this page is too high up and munmap
   would return EINVAL)
 
 
+Installation
+------------
+
+`pip` has to be the python 3 pip, not the python2 pip, which is
+often installed as `pip2` these days.
+`pip` installed fusepy 3.0.1 for me.
+
+    $ pip install fusepy
+    $ cc -o zeromaps zeromaps.c
+    $ mkdir x
+    $ ./fs.py x
+    ... after you start zeromaps
+    /blockme
+    blocked, press enter
+
+In another window:
+
+    $ ./zeromaps
+    spawned thread
+    got all the maps
+    BTW MY PID IS 37677
+    start unmapping like crazy
+
+You can check that all the memory mappings are deleted:
+
+    $ cat /proc/37677/maps
 
 Why
 ---
