@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 
 import fuse
 import time
@@ -7,8 +7,9 @@ import errno
 
 class fs(fuse.Operations):
     def getattr(self, path, fh=None):
+        print(path)
         if "blockme" in path:
-            raw_input('blocked, press enter')
+            input('blocked, press enter')
         raise fuse.FuseOSError(errno.ENOENT)
 
 fuse.FUSE(fs(), sys.argv[1], foreground=True)
