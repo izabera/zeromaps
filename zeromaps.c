@@ -9,12 +9,6 @@
 void *thread(void *x) { open("x/blockme", 0); return 0; }
 
 int main() {
-    pthread_t t;
-    pthread_create(&t, 0, thread, 0);
-    sleep(1);
-
-    puts("spawned thread");
-
     FILE *mapsfile = fopen("/proc/self/maps", "r");
 
     struct m { long start, end; };
@@ -72,5 +66,22 @@ void f() {
     printf("BTW MY PID IS %d\n", getpid());
 
     puts("start unmapping like crazy");
+
+#ifdef PANIC_KERNEL
+    /* all forked processes share the same mapped memory */
+    while (fork() <= 0) { // maximize the effect
+#endif
+   
+    pthread_t t;
+    pthread_create(&t, 0, thread, 0);
+    sleep(1);
+
+#ifndef PANIC_KERNEL
+    puts("spawned thread");
+#endif
+
     f();
+#ifdef PANIC_KERNEL
+    }
+#endif
 }
